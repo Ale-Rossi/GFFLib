@@ -1,4 +1,4 @@
-package GFFTranscript;
+package GFFLib::GFFTranscript;
 use strict 'vars';
 use strict 'refs';
 

@@ -1,4 +1,4 @@
-package GFFUTR;
+package GFFLib::GFFUTR;
 use strict 'vars';
 use strict 'refs';
 
