@@ -2,7 +2,7 @@ package GFFFile;
 use strict 'vars';
 use strict 'refs';
 
-use GFFGene;
+use GFFLib::GFFGene;
 use Data::Dumper;
 use Carp;
 
