@@ -1,12 +1,12 @@
-package GFFLib::GFFTranscript;
+package GFFTranscript;
 use strict 'vars';
 use strict 'refs';
 
 use Carp;
 
-use GFFExon;
-use GFFUTR;
-use GFFCDS;
+use GFFLib::GFFExon;
+use GFFLib::GFFUTR;
+use GFFLib::GFFCDS;
 #use Interval;
 
 sub new {

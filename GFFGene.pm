@@ -1,8 +1,8 @@
-package GFFLib::GFFGene;
+package GFFGene;
 use strict 'vars';
 use strict 'refs';
 
-use GFFTranscript;
+use GFFLib::GFFTranscript;
 
 sub new {
 	my ( $gene_id, $gene_name, $chrom, $start_coord, $end_coord, $strand, $file ) = @_;
