@@ -1,4 +1,4 @@
-package GFFGene;
+package GFFLib::GFFGene;
 use strict 'vars';
 use strict 'refs';
 
