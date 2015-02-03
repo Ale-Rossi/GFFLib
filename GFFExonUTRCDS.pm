@@ -2,7 +2,7 @@ package GFFExonUTRCDS;
 use strict 'vars';
 use strict 'refs';
 
-require GFFTranscript;
+require GFFLib::GFFTranscript;
 
 # use overload '==' => \&compare;
 
