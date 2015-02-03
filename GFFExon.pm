@@ -1,4 +1,4 @@
-package GFFExon;
+package GFFLib::GFFExon;
 use strict 'vars';
 use strict 'refs';
 
