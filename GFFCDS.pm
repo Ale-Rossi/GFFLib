@@ -1,4 +1,4 @@
-package GFFCDS;
+package GFFLib::GFFCDS;
 use strict 'vars';
 use strict 'refs';
 
