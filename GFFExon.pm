@@ -1,11 +1,11 @@
-package GFFLib::GFFExon;
+package GFFExon;
 use strict 'vars';
 use strict 'refs';
 
-require GFFTranscript;
+require GFFLib::GFFTranscript;
 
-use GFFCDS;
-use GFFUTR;
+use GFFLib::GFFCDS;
+use GFFLib::GFFUTR;
 
 my $debug = 1;
 
