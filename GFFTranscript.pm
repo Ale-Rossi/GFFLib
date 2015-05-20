@@ -4,9 +4,9 @@ use strict 'refs';
 
 use Carp;
 
-use GFFLib::GFFExon;
-use GFFLib::GFFUTR;
-use GFFLib::GFFCDS;
+use GFFExon;
+use GFFUTR;
+use GFFCDS;
 #use Interval;
 
 sub new {

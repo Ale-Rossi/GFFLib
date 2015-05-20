@@ -2,11 +2,11 @@ package GFFUtils;
 use strict 'vars';
 use strict 'refs';
 
-use GFFLib::GFFGene;
-use GFFLib::GFFExon;
-use GFFLib::GFFUTR;
-use GFFLib::GFFCDS;
-use GFFLib::GFFTranscript;
+use GFFGene;
+use GFFExon;
+use GFFUTR;
+use GFFCDS;
+use GFFTranscript;
 
 use Data::Dumper;
 

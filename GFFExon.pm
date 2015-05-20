@@ -2,10 +2,10 @@ package GFFExon;
 use strict 'vars';
 use strict 'refs';
 
-require GFFLib::GFFTranscript;
+require GFFTranscript;
 
-use GFFLib::GFFCDS;
-use GFFLib::GFFUTR;
+use GFFCDS;
+use GFFUTR;
 
 my $debug = 1;
 

@@ -2,8 +2,8 @@ package GFFUTR;
 use strict 'vars';
 use strict 'refs';
 
-require GFFLib::GFFTranscript;
-require GFFLib::GFFExon;
+require GFFTranscript;
+require GFFExon;
 
 # use overload '==' => \&compare;
 # type = [five_prime_utr,three_prime_utr]	
