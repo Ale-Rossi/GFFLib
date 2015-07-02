@@ -18,7 +18,7 @@ my $usage = "$0 <GFF IN> <GFF OUT with one representative for each cluster > \n\
 die $usage if scalar(@ARGV) != 2;
 
 my $gff_filename_in = $ARGV[0];
-my $out_gff        = $ARGV[1];
+my $out_gff         = $ARGV[1];
 
 my $gff_handler = GFFFile::new( $gff_filename_in );
 $gff_handler->read();
