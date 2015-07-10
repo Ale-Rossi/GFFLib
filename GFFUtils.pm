@@ -308,5 +308,50 @@ sub overlapping_genes_using_buffer{
 
 	return ( \%overlap_from_A, \%overlap_from_B );
 }
+
+
+# List issues like this
+
+# Current model                                       |||||-----||||||||----------||||||
+# Final model                                         |||||-----||||||||||||||||||||||||
+
+# OR
+
+# Current model                                       |||||-----||||||||----------||||||
+# Final model                                         |||||-----|||||||||||||||||||||
+
+sub was_an_intron_retained{
+
+		my ($transA, $transB ) = @_;	
+
+		# Format:
+		# <intron1 start>..<intron1 end>-<intron2 start>..<intron2 end>		
+		my $splice_str = $transB->get_splice_str();
+		
+		my @splices = split "-", $splice_str;
+		
+		foreach my $curr_splice ( @splices ){
+			my ($splice_start, $splice_end) = ( $curr_splice =~ /(\d+)\.\.(\d+)/ );
+			
+			my $exon_A_overlaping_start = $transA->get_exon_by_coord( $splice_start );
+			my $exon_A_overlaping_end = $transA->get_exon_by_coord( $splice_end );
+			
+			#print "$exon_A_overlaping_start $exon_A_overlaping_end\n" if ( $transcript_id eq 'AN7351_mRNA' );
+			
+			# If one of the attempts of retrieving the gene fails THEN
+		    # coord. still belongs to an intron. NO INTEGRAL intron retention 			
+			next if( $exon_A_overlaping_start == 0 || $exon_A_overlaping_end == 0 );
+
+			# If the same exon was retrieved using the $splice_start and $splice_end
+			# THEN INTEGRAL RETENTION happened
+			if( $exon_A_overlaping_start->get_start() == $exon_A_overlaping_end->get_start() &&
+			    $exon_A_overlaping_start->get_end() == $exon_A_overlaping_end->get_end()  ){
+				print LOGFILE $transA->get_id() . "\n";
+				print OUT $transA->get_id() . "\n";
+				last;
+			}			
+		}	
+}
+
 return 1;
 
