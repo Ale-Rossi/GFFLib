@@ -1,5 +1,9 @@
-#!/usr/bin/perl
+#!/bin/env perl
 use strict;
+
+use FindBin;
+use lib "$FindBin::Bin";
+
 use GFFFile;
 
 my $usage = "gff_geneid_based_filtering.pl <id list file> <GFF file> <GFF out> [remove]\n\n";

@@ -1,5 +1,9 @@
-#!/usr/bin/perl
+#!/bin/env perl
 use strict;
+
+use FindBin;
+use lib "$FindBin::Bin";
+
 use GFFFile;
 use GFFUtils;
 

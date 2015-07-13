@@ -1,5 +1,9 @@
-#!/usr/bin/perl
+#!/bin/env perl
 use strict;
+
+use FindBin;
+use lib "$FindBin::Bin";
+
 use GFFFile;
 
 my $usage = "$0 <id list file> <GFF file> <new GFF> [remove]\n\n";
