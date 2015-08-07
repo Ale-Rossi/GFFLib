@@ -18,8 +18,12 @@ sub are_end_exons_compatible {
 	# End exons are compatible if
 	# - end coordinates of the first exon are the same
 	# - start coordinates of the last exon are the same
-	return 0 if $gffTrans1->get_first_exon()->get_end() != $gffTrans2->get_first_exon()->get_end();
-	return 0 if $gffTrans1->get_end_exon()->get_start() != $gffTrans2->get_end_exon()->get_start();
+	return 0
+	  if $gffTrans1->get_first_exon()->get_end() !=
+		  $gffTrans2->get_first_exon()->get_end();
+	return 0
+	  if $gffTrans1->get_end_exon()->get_start() !=
+		  $gffTrans2->get_end_exon()->get_start();
 
 	return 1;
 }
@@ -27,10 +31,10 @@ sub are_end_exons_compatible {
 sub are_exons_compatible {
 	my ( $gffExon1, $gffExon2 ) = @_;
 
-	# Exons are compatible if:
-	# - They are the last exons and start coordinates are identical
-	# - They are the first exons and end coordinates are identical
-	# - If they are neither the first nor the last exons but the coordinates are identical
+# Exons are compatible if:
+# - They are the last exons and start coordinates are identical
+# - They are the first exons and end coordinates are identical
+# - If they are neither the first nor the last exons but the coordinates are identical
 
 	return 1
 	  if ( ( $gffExon1->get_start() == $gffExon2->get_start() )
@@ -52,8 +56,10 @@ sub ref_based_transcript_trimming {
 	  @_;    #$end = [up,down], up = upstream end, down = downstream end
 
 	if ( $end eq "up" ) {
-		$gffTransNew->get_first_exon()->set_start( $gffTransRef->get_first_exon()->get_start() );
-		$gffTransNew->get_first_UTR()->set_start( $gffTransRef->get_first_UTR()->get_start() );
+		$gffTransNew->get_first_exon()
+		  ->set_start( $gffTransRef->get_first_exon()->get_start() );
+		$gffTransNew->get_first_UTR()
+		  ->set_start( $gffTransRef->get_first_UTR()->get_start() );
 		$gffTransNew->set_start( $gffTransRef->get_start() );
 	}
 	elsif ( $end eq "down" ) {
@@ -70,17 +76,17 @@ sub ref_based_transcript_trimming {
 	}
 
 }
+
 sub ref_based_exon_trimming {
 	my ( $gffExonRef, $gffExonNew, $end ) =
 	  @_;    #$end = [up,down], up = upstream end, down = downstream end
-	  
+
 	return ref_based_exon_adjustment( $gffExonRef, $gffExonNew, $end );
 }
-	
-	
+
 sub ref_based_exon_adjustment {
-	my ( $gffExonRef, $gffExonNew, $end ) =
-	  @_;    #$end = [up,down], up = upstream end, down = downstream end, both = both ends will be adjusted (for single exons)
+	my ( $gffExonRef, $gffExonNew, $end ) = @_
+	  ; #$end = [up,down], up = upstream end, down = downstream end, both = both ends will be adjusted (for single exons)
 
 	my $gffTransNew = $gffExonNew->get_parent();
 	my $gffTransRef = $gffExonRef->get_parent();
@@ -110,15 +116,15 @@ sub ref_based_exon_adjustment {
 			$target_end = $min_end if ( $target_end < $min_end );
 		}
 
-		print ">> $target_end\n";		
+		print ">> $target_end\n";
 		$gffExonNew->set_end($target_end);
 		$gffTransNew->set_end($target_end);
 
 	}
-	
-	if( $end ne "up" && $end ne "down" && $end ne "both"  ){
+
+	if ( $end ne "up" && $end ne "down" && $end ne "both" ) {
 		die
-		  "GFFUtils::ref_based_exon_adjustment third parameter should be either \"up\" or \"down\"\n";
+"GFFUtils::ref_based_exon_adjustment third parameter should be either \"up\" or \"down\"\n";
 	}
 
 }
@@ -179,13 +185,16 @@ sub sort_gene_arrays {
 			my ($a_num_chrom) = ( $a->get_chrom() =~ /(\d+)/ );
 			my ($b_num_chrom) = ( $b->get_chrom() =~ /(\d+)/ );
 
-			return $a_num_chrom <=> $b_num_chrom || $a->get_start() <=> $b->get_start()
+			return $a_num_chrom <=> $b_num_chrom
+			  || $a->get_start() <=> $b->get_start()
 		  } @{$gffGeneArrayRef};
 	}
 	else {
 		@{$gffGeneArrayRef} =
-		  sort { return $a->get_chrom() cmp $b->get_chrom() || $a->get_start() <=> $b->get_start() }
-		  @{$gffGeneArrayRef};
+		  sort {
+			return $a->get_chrom() cmp $b->get_chrom()
+			  || $a->get_start() <=> $b->get_start()
+		  } @{$gffGeneArrayRef};
 
 	}
 
@@ -200,7 +209,8 @@ sub print_exon_comparison {
 	for my $currTranscript_a ( values %{$gffTranscripts_a} ) {
 		for my $currTranscript_b ( values %{$gffTranscripts_b} ) {
 			for my $currExon_a ( @{ $currTranscript_a->get_exon_array() } ) {
-				for my $currExon_b ( @{ $currTranscript_b->get_exon_array() } ) {
+				for my $currExon_b ( @{ $currTranscript_b->get_exon_array() } )
+				{
 
 					my $equivalence_symbol = "";
 					if ( $currExon_a->identical($currExon_b) ) {
@@ -224,14 +234,86 @@ sub print_exon_comparison {
 	}
 }
 
+sub exon_comparison {
+	my ( $gene_a, $gene_b ) = @_;
+
+	my $gffTranscripts_a = $gene_a->get_transcripts_hash();
+	my $gffTranscripts_b = $gene_b->get_transcripts_hash();
+
+	for my $currTranscript_a ( values %{$gffTranscripts_a} ) {
+		for my $currTranscript_b ( values %{$gffTranscripts_b} ) {
+			for my $currExon_a ( @{ $currTranscript_a->get_exon_array() } ) {
+				my $identical_or_overlaps = 0;
+
+				for my $currExon_b ( @{ $currTranscript_b->get_exon_array() } )
+				{
+					$identical_or_overlaps = 1
+					  if ( $currExon_a->identical($currExon_b)
+						|| $currExon_a->overlaps($currExon_b) );
+				}
+				
+				if ( $identical_or_overlaps == 0 ) {
+					print "\tEXON:\t"
+					  . $currExon_a->get_id() . ":"
+					  . $currExon_a->get_start() . "-"
+					  . $currExon_a->get_end() . "\t" . "ONLY" . "\t" . "\n";
+				}
+			}
+		}
+	}
+
+	for my $currTranscript_b ( values %{$gffTranscripts_b} ) {
+		for my $currTranscript_a ( values %{$gffTranscripts_a} ) {
+			for my $currExon_b ( @{ $currTranscript_b->get_exon_array() } ) {
+				my $identical_or_overlaps = 0;
+				for my $currExon_a ( @{ $currTranscript_a->get_exon_array() } )
+				{
+					$identical_or_overlaps = 1
+					  if ( $currExon_b->identical($currExon_a)
+						|| $currExon_b->overlaps($currExon_a) );
+				}
+				if ( $identical_or_overlaps == 0 ) {
+					print "\tEXON:\t\tONLY\t"
+					  . $currExon_b->get_id() . ":"
+					  . $currExon_b->get_start() . "-"
+					  . $currExon_b->get_end() . "\n";
+				}
+			}
+		}
+	}
+
+	for my $currTranscript_a ( values %{$gffTranscripts_a} ) {
+		for my $currTranscript_b ( values %{$gffTranscripts_b} ) {
+			for my $currExon_a ( @{ $currTranscript_a->get_exon_array() } ) {
+				for my $currExon_b ( @{ $currTranscript_b->get_exon_array() } )
+				{
+
+					if ( not $currExon_a->identical($currExon_b)
+						&& $currExon_a->overlaps($currExon_b) )
+					{
+						print "\tEXON:\t"
+						  . $currExon_a->get_id() . ":"
+						  . $currExon_a->get_start() . "-"
+						  . $currExon_a->get_end() . "\t" . "~" . "\t"
+						  . $currExon_b->get_id() . ":"
+						  . $currExon_b->get_start() . "-"
+						  . $currExon_b->get_end() . "\n";
+					}
+
+				}
+			}
+		}
+	}
+}
 
 sub overlapping_genes_ {
 	my ( $gff_a, $gff_b ) = @_;
-	
+
 	return overlapping_genes_using_buffer( $gff_a, $gff_b, 0 );
-} 
-	
-sub overlapping_genes_using_buffer{
+}
+
+sub overlapping_genes_using_buffer {
+
 	# Reference GFFFile
 	my ( $gff_a, $gff_b, $buffer ) = @_;
 
@@ -255,8 +337,13 @@ sub overlapping_genes_using_buffer{
 		#getc();
 
 		for ( my $i2 = $i1 + 1 ; $i2 < scalar(@gffGenesArray) ; $i2++ ) {
-			last if ( not $gffGenesArray[$i1]->overlaps( $gffGenesArray[$i2],"strandness", $buffer ) );
-			next if ( $gffGenesArray[$i1]->get_filename() eq $gffGenesArray[$i2]->get_filename() );
+			last
+			  if (
+				not $gffGenesArray[$i1]
+				->overlaps( $gffGenesArray[$i2], "strandness", $buffer ) );
+			next
+			  if ( $gffGenesArray[$i1]->get_filename() eq
+				$gffGenesArray[$i2]->get_filename() );
 
 			my $gene_a;
 			my $gene_b;
@@ -281,21 +368,21 @@ sub overlapping_genes_using_buffer{
 				  . $gffGenesArray[$i2]->get_filename() . "\n";
 			}
 
-#			print STDERR "GENE:\t"
-#			  . $gene_a->get_id() . ":"
-#			  . $gene_a->get_chrom() . ":"
-#			  . $gene_a->get_start() . "-"
-#			  . $gene_a->get_end() . ":"
-#			  . $gene_a->get_strand()
-#			  . ":exons="
-#			  . $gene_a->num_exons() . "\t"
-#			  . $gene_b->get_id() . ":"
-#			  . $gene_b->get_chrom() . ":"
-#			  . $gene_b->get_start() . "-"
-#			  . $gene_b->get_end() . ":"
-#			  . $gene_a->get_strand()
-#			  . ":exons="
-#			  . $gene_b->num_exons() . "\n";
+			#			print STDERR "GENE:\t"
+			#			  . $gene_a->get_id() . ":"
+			#			  . $gene_a->get_chrom() . ":"
+			#			  . $gene_a->get_start() . "-"
+			#			  . $gene_a->get_end() . ":"
+			#			  . $gene_a->get_strand()
+			#			  . ":exons="
+			#			  . $gene_a->num_exons() . "\t"
+			#			  . $gene_b->get_id() . ":"
+			#			  . $gene_b->get_chrom() . ":"
+			#			  . $gene_b->get_start() . "-"
+			#			  . $gene_b->get_end() . ":"
+			#			  . $gene_a->get_strand()
+			#			  . ":exons="
+			#			  . $gene_b->num_exons() . "\n";
 
 			my $a_id = $gene_a->get_id();
 			my $b_id = $gene_b->get_id();
@@ -309,7 +396,6 @@ sub overlapping_genes_using_buffer{
 	return ( \%overlap_from_A, \%overlap_from_B );
 }
 
-
 # List issues like this
 
 # Current model                                       |||||-----||||||||----------||||||
@@ -320,37 +406,42 @@ sub overlapping_genes_using_buffer{
 # Current model                                       |||||-----||||||||----------||||||
 # Final model                                         |||||-----|||||||||||||||||||||
 
-sub was_an_intron_retained{
+sub was_an_intron_retained {
 
-		my ($transA, $transB ) = @_;	
+	my ( $transA, $transB ) = @_;
 
-		# Format:
-		# <intron1 start>..<intron1 end>-<intron2 start>..<intron2 end>		
-		my $splice_str = $transB->get_splice_str();
-		
-		my @splices = split "-", $splice_str;
-		
-		foreach my $curr_splice ( @splices ){
-			my ($splice_start, $splice_end) = ( $curr_splice =~ /(\d+)\.\.(\d+)/ );
-			
-			my $exon_A_overlaping_start = $transA->get_exon_by_coord( $splice_start );
-			my $exon_A_overlaping_end = $transA->get_exon_by_coord( $splice_end );
-			
-			#print "$exon_A_overlaping_start $exon_A_overlaping_end\n" if ( $transcript_id eq 'AN7351_mRNA' );
-			
-			# If one of the attempts of retrieving the gene fails THEN
-		    # coord. still belongs to an intron. NO INTEGRAL intron retention 			
-			next if( $exon_A_overlaping_start == 0 || $exon_A_overlaping_end == 0 );
+	# Format:
+	# <intron1 start>..<intron1 end>-<intron2 start>..<intron2 end>
+	my $splice_str = $transB->get_splice_str();
 
-			# If the same exon was retrieved using the $splice_start and $splice_end
-			# THEN INTEGRAL RETENTION happened
-			if( $exon_A_overlaping_start->get_start() == $exon_A_overlaping_end->get_start() &&
-			    $exon_A_overlaping_start->get_end() == $exon_A_overlaping_end->get_end()  ){
-			    	return 1;
+	my @splices = split "-", $splice_str;
 
-			}			
-		}	
-		return 0;
+	foreach my $curr_splice (@splices) {
+		my ( $splice_start, $splice_end ) =
+		  ( $curr_splice =~ /(\d+)\.\.(\d+)/ );
+
+		my $exon_A_overlaping_start = $transA->get_exon_by_coord($splice_start);
+		my $exon_A_overlaping_end   = $transA->get_exon_by_coord($splice_end);
+
+#print "$exon_A_overlaping_start $exon_A_overlaping_end\n" if ( $transcript_id eq 'AN7351_mRNA' );
+
+		# If one of the attempts of retrieving the gene fails THEN
+		# coord. still belongs to an intron. NO INTEGRAL intron retention
+		next
+		  if ( $exon_A_overlaping_start == 0 || $exon_A_overlaping_end == 0 );
+
+		# If the same exon was retrieved using the $splice_start and $splice_end
+		# THEN INTEGRAL RETENTION happened
+		if ( $exon_A_overlaping_start->get_start() ==
+			   $exon_A_overlaping_end->get_start()
+			&& $exon_A_overlaping_start->get_end() ==
+			$exon_A_overlaping_end->get_end() )
+		{
+			return 1;
+
+		}
+	}
+	return 0;
 }
 
 # List issues like this
@@ -359,19 +450,17 @@ sub was_an_intron_retained{
 # Transcript evidence with partial intron retention   |||||-----|||||||||||
 # Final model                                         |||||-----|||||||||||
 
+sub was_an_intron_partially_retained {
 
-
-sub was_an_intron_partially_retained{
-
-	my ($transA, $transB ) = @_;	
+	my ( $transA, $transB ) = @_;
 
 # if none of the ends of current model is intronic when compared to previous version then
 # this is not the case that we are looking for.
-		if (   $transB->is_intronic( $transA->get_start() )
-			|| $transB->is_intronic( $transA->get_end() ) )
-		{
-			return 1;
-		}
+	if (   $transB->is_intronic( $transA->get_start() )
+		|| $transB->is_intronic( $transA->get_end() ) )
+	{
+		return 1;
+	}
 	return 0;
 }
 
