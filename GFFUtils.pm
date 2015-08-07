@@ -361,11 +361,33 @@ sub was_an_intron_retained{
 			# THEN INTEGRAL RETENTION happened
 			if( $exon_A_overlaping_start->get_start() == $exon_A_overlaping_end->get_start() &&
 			    $exon_A_overlaping_start->get_end() == $exon_A_overlaping_end->get_end()  ){
-				print LOGFILE $transA->get_id() . "\n";
-				print OUT $transA->get_id() . "\n";
-				last;
+			    	return 1;
+
 			}			
 		}	
+		return 0;
+}
+
+# List issues like this
+
+# Current model                                       |||||-----||||||||----------||||||
+# Transcript evidence with partial intron retention   |||||-----|||||||||||
+# Final model                                         |||||-----|||||||||||
+
+
+
+sub was_an_intron_partially_retained{
+
+	my ($transA, $transB ) = @_;	
+
+# if none of the ends of current model is intronic when compared to previous version then
+# this is not the case that we are looking for.
+		if (   $transB->is_intronic( $transA->get_start() )
+			|| $transB->is_intronic( $transA->get_end() ) )
+		{
+			return 1;
+		}
+	return 0;
 }
 
 return 1;
