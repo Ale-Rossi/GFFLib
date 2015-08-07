@@ -200,6 +200,21 @@ sub sort_gene_arrays {
 
 }
 
+sub is_gene_different_transcript_span {
+	my ( $gene) = @_;
+
+	if( $gene->get_transcript_span_start()  != $gene->get_start() ){
+		return 1;
+	}
+
+	if( $gene->get_transcript_span_end()  != $gene->get_end() ){
+		return 1;
+	}
+
+	return 0;
+
+}
+
 sub print_exon_comparison {
 	my ( $gene_a, $gene_b ) = @_;
 
