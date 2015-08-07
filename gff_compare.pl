@@ -51,10 +51,14 @@ for ( my $i1 = 0; $i1 <  scalar(@gffGenesArray); $i1++ ){
 			die "Unknown filenames:\n\t" . $gffGenesArray[ $i1 ]->get_filename() . "\n\t" . $gffGenesArray[ $i2 ]->get_filename() . "\n";
 		}
 		
-		print "GENE:\t" . $gene_a->get_id() . ":" . $gene_a->get_chrom() . ":" . $gene_a->get_start() . "-" . $gene_a->get_end() . ":" . $gene_a->get_strand() . ":exons=" . $gene_a->num_exons() . "\t" . 
-		      			  $gene_b->get_id() . ":" . $gene_b->get_chrom() . ":" . $gene_b->get_start() . "-" . $gene_b->get_end() . ":" . $gene_a->get_strand() . ":exons=" . $gene_b->num_exons() . "\n";
+		my $exon_comparison = GFFUtils::print_exon_comparison( $gene_a, $gene_b);
+		
+		if( $exon_comparison ne '' ){
+			print "GENE:\t" . $gene_a->get_id() . ":" . $gene_a->get_chrom() . ":" . $gene_a->get_start() . "-" . $gene_a->get_end() . ":" . $gene_a->get_strand() . ":exons=" . $gene_a->num_exons() . "\t" . 
+		    	  			  $gene_b->get_id() . ":" . $gene_b->get_chrom() . ":" . $gene_b->get_start() . "-" . $gene_b->get_end() . ":" . $gene_a->get_strand() . ":exons=" . $gene_b->num_exons() . "\n";
+		}
 		      
-		GFFUtils::print_exon_comparison( $gene_a, $gene_b);		      
+				      
 		      
 	}
 }

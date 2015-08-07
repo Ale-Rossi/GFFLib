@@ -48,7 +48,7 @@ for my $gene_id ( keys %{$gffAGenes} ) {
 	my $gffTranscriptsA = $gffAGenes->{$gene_id}->get_transcripts_hash();
 		
 	my $mainTranscript;
-	map {$mainTranscript =  $gffTranscriptsA->{ $_ } if $_ =~ /\d.1$/ } keys %{$gffTranscriptsA};
+	map {$mainTranscript =  $gffTranscriptsA->{ $_ } if $_ =~ /.1$/ } keys %{$gffTranscriptsA};
 	
 	for my $transcript_id ( keys %{$gffTranscriptsA} ) {
 		next if $transcript_id eq $mainTranscript->get_id();
