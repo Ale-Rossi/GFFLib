@@ -212,7 +212,6 @@ sub is_gene_different_transcript_span {
 	}
 
 	return 0;
-
 }
 
 sub print_exon_comparison {
@@ -252,6 +251,8 @@ sub print_exon_comparison {
 sub exon_comparison {
 	my ( $gene_a, $gene_b ) = @_;
 
+	my $content = "";
+	
 	my $gffTranscripts_a = $gene_a->get_transcripts_hash();
 	my $gffTranscripts_b = $gene_b->get_transcripts_hash();
 
@@ -268,7 +269,7 @@ sub exon_comparison {
 				}
 				
 				if ( $identical_or_overlaps == 0 ) {
-					print "\tEXON:\t"
+					$content .= "\tEXON:\t"
 					  . $currExon_a->get_id() . ":"
 					  . $currExon_a->get_start() . "-"
 					  . $currExon_a->get_end() . "\t" . "ONLY" . "\t" . "\n";
@@ -288,7 +289,7 @@ sub exon_comparison {
 						|| $currExon_b->overlaps($currExon_a) );
 				}
 				if ( $identical_or_overlaps == 0 ) {
-					print "\tEXON:\t\tONLY\t"
+					$content .= "\tEXON:\t\tONLY\t"
 					  . $currExon_b->get_id() . ":"
 					  . $currExon_b->get_start() . "-"
 					  . $currExon_b->get_end() . "\n";
@@ -306,7 +307,7 @@ sub exon_comparison {
 					if ( not $currExon_a->identical($currExon_b)
 						&& $currExon_a->overlaps($currExon_b) )
 					{
-						print "\tEXON:\t"
+						$content .= "\tEXON:\t"
 						  . $currExon_a->get_id() . ":"
 						  . $currExon_a->get_start() . "-"
 						  . $currExon_a->get_end() . "\t" . "~" . "\t"
@@ -319,6 +320,8 @@ sub exon_comparison {
 			}
 		}
 	}
+	
+	return $content;
 }
 
 sub overlapping_genes_ {

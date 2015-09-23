@@ -78,6 +78,8 @@ sub delete_transcript {
 	my ($id) = @_;
 	undef $self->{transcript}->{$id};
 	delete $self->{transcript}->{$id};
+	
+	$self->adjust_boundaries_transcript_based();
 }
 
 sub get_name {

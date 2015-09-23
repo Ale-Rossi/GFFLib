@@ -82,17 +82,17 @@ sub read {
 	
 	my $cmd = "cp " . $self->{filename} . "  " . $self->{filename} . ".temp";
 	
-	print "Reading genes...\n";
+	print STDERR "Reading genes...\n";
 	$self->read_genes( $discard_additional_attributes, $add_missing );
-	print  "Reading transcripts...\n";
+	print STDERR "Reading transcripts...\n";
 	$self->read_transcripts( $discard_additional_attributes, $add_missing );
-	print  "Reading exons...\n";
+	print STDERR "Reading exons...\n";
 	$self->read_exons( $discard_additional_attributes, $add_missing );
-	print  "Reading UTRs...\n";
+	print STDERR "Reading UTRs...\n";
 	$self->read_utrs( $discard_additional_attributes, $add_missing );
-	print  "Reading CDS...\n";
+	print STDERR "Reading CDS...\n";
 	$self->read_cds( $discard_additional_attributes, $add_missing );
-	print  "Post-processing...\n";
+	print STDERR "Post-processing...\n";
 	$self->post_processing($add_missing);
 }
 

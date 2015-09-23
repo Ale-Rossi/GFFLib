@@ -56,6 +56,7 @@ for my $currGene ( values %{$gffGenes} ) {
 			$num_transcripts_found++;
 
 			$currGene->delete_transcript($transcript_id);
+						
 		}
 	}
 	print OUT $currGene->toGFF();	
