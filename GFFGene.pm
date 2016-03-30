@@ -155,6 +155,9 @@ sub set_chrom {
 	my $self = shift;
 	my ($chrom) = @_;
 	$self->{chrom} = $chrom;
+	# TODO
+	#$self->{chrom_index}->{$chrom}->{$gene_id} =
+	#					$gene_temp_feature;
 }
 
 sub get_strand {
@@ -232,6 +235,16 @@ sub toGFF {
 	return $str;
 }
 
+
+sub toGTF {
+	my $self = shift;
+	my $str;
+	foreach my $ref_transcript ( values %{ $self->{transcript} } ) {
+		$str .= $ref_transcript->toGTF( $self->{chrom}, $self->{id}, $self->{strand} );
+	}
+	return $str;
+}
+
 sub get_num_transcripts {
 	my $self = shift;	
 	return scalar( values %{ $self->{transcript} } );
@@ -248,6 +261,10 @@ sub set_attribute {
 sub get_attribute {
 	my $self = shift;
 	my ($key) = @_;
+	if( not defined $self->{attrib}{$key} ){
+		die "Gene attribute $key does not exist for gene " 
+		. $self->get_id() . " on file " . $self->get_filename() . "\n";
+	}
 	return $self->{attrib}{$key};
 }
 

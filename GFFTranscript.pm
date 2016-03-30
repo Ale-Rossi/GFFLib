@@ -1150,6 +1150,7 @@ sub get_last_CDS_strand_based {
 	}
 }
 
+
 sub get_first_exon {
 	my $self = shift;
 	if ( defined( $self->{exons} ) ) {
@@ -1384,6 +1385,33 @@ sub toGFF {
 
 	return $str;
 }
+
+sub toGTF {
+	my $self = shift;
+
+	my ( $chrom, $parent, $strand ) = @_;
+		
+	my $str;
+	foreach my $ref_exon ( @{ $self->{'UTR'} } ) {
+		#print STDERR "IN UTR\n";
+		#getc();
+		$str .= $ref_exon->toGTF( $chrom, $self->{id}, $strand );
+	}
+
+	foreach my $ref_exon ( @{ $self->{'CDS'} } ) {
+		#print STDERR "IN CDS\n";
+		#getc();
+		$str .= $ref_exon->toGTF( $chrom, $self->{id}, $strand );
+	}
+
+	my $transcript_id = $self->get_id();
+	my $gene_id = $self->get_parent()->get_id();
+	
+	$str =~ s/\n/\tgene_id \"$gene_id\"; transcript_id \"$transcript_id\";\n/g;
+
+	return $str;
+}
+
 
 sub set_attribute {
 	my $self = shift;

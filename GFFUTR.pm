@@ -73,6 +73,13 @@ sub get_type {
 	return $self->{type};
 }
 
+sub get_type_GTF {
+	my $self = shift;
+	return '5UTR' if $self->{type} eq 'five_prime_utr';
+	return '3UTR' if $self->{type} eq 'three_prime_utr';
+}
+
+
 sub get_parent {
 	my $self = shift;
 	return $self->{parent};
@@ -148,6 +155,22 @@ sub toGFF {
 	      $strand . "\t.\t" . 
 	      "ID=" . $self->{id} . ";" .
       	      "Parent=$parent;\n";
+      	      
+    return $str;	
+}
+
+sub toGTF {
+	my $self = shift;
+	
+	#print STDERR "UTR\n";
+	#getc();
+	
+	my ($chrom, $parent, $strand ) = @_;
+	
+	my $str = $chrom . "\t.\t" . $self->get_type_GTF() . "\t" . 
+	      $self->{start} . "\t" . 
+	      $self->{end} . "\t.\t" . 
+	      $strand . "\t.\n";
       	      
     return $str;	
 }
