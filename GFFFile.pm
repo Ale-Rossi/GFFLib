@@ -74,7 +74,7 @@ sub read {
 	
 	# Add missing features:
 	# - add missing genes, transcripts and exons from existing CDS
-	# - genes from transcripts, exons or CDS (NOT IMPLEMENTED)
+	# - genes exons or CDS (NOT IMPLEMENTED)
 	# - transcripts from exon or CDS (NOT IMPLEMENTED)
 	# - exons from CDS (NOT IMPLEMENTED)
 	
@@ -146,11 +146,7 @@ sub read_genes {
 				## General initialization of features
 				
 				# Set additional attributes
-				if (
-					not defined($discard_additional_attributes)
-					|| ( defined($discard_additional_attributes)
-						&& $discard_additional_attributes == 0 )
-					)
+				if ( $discard_additional_attributes == 0 )
 				{
 					foreach my $currKey ( keys %attr ) {
 						$temp_feature->set_attribute( $currKey, $attr{$currKey} );
@@ -207,7 +203,7 @@ sub read_transcripts {
 				
 				
 				if ( $parent eq '' || not defined $self->{genes}->{$parent} ) {
-					if ( $add_missing == 1 ) {
+					if ( $add_missing != 0 ) {
 						
 						my $gene_name = $id . "-G";
 						my $gene_id   = $id . "-G";
@@ -219,6 +215,14 @@ sub read_transcripts {
 						$self->{genes}->{$gene_id} = $gene_temp_feature;
 						$self->{chrom_index}->{$chrom}->{$gene_id} =
 						$gene_temp_feature;
+						
+				
+				if ( $discard_additional_attributes == 0 )
+				{
+					foreach my $currKey ( keys %attr ) {
+						$gene_temp_feature->set_attribute( $currKey, $attr{$currKey} );
+					}
+				}						
 						
 						$parent = $gene_id;
 					}else{
@@ -243,16 +247,16 @@ sub read_transcripts {
 				
 				#######################################
 				## General initialization of features
-				
 				# Set additional attributes
-				if (
-					not defined($discard_additional_attributes)
-					|| ( defined($discard_additional_attributes)
-						&& $discard_additional_attributes == 0 )
-					)
+				
+				#Set additional attributes
+				#print ">>>>$discard_additional_attributes<<\n";
+				#getc();
+							
+				if ( $discard_additional_attributes == 0 )
 				{
 					foreach my $currKey ( keys %attr ) {
-						$temp_feature->set_attribute( $currKey, $attr{$currKey} );
+						$temp_feature->set_attribute( $currKey, $attr{$currKey} );						
 					}
 				}
 				
@@ -400,8 +404,7 @@ sub read_exons {
 			#	getc();
 			
 			# Set additional attributes
-			#if( not defined( $discard_additional_attributes ) ||
-			#    ( defined( $discard_additional_attributes ) && $discard_additional_attributes == 0 ) ){
+			#if( $discard_additional_attributes == 0 ){
 			foreach my $currKey ( keys %attr ) {
 				$temp_feature->set_attribute( $currKey, $attr{$currKey} );
 			}

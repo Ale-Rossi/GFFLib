@@ -258,6 +258,12 @@ sub set_attribute {
 	return $self->{attrib}{$key} = $value;
 }
 
+sub check_attribute {
+	my $self = shift;
+	my ($key) = @_;
+	return defined $self->{attrib}{$key};
+}
+
 sub get_attribute {
 	my $self = shift;
 	my ($key) = @_;

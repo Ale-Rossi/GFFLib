@@ -231,7 +231,15 @@ sub post_processing {
 	$self->attach_UTR();
 	$self->attach_CDS();
 
-	$self->add_missing_exons_from_CDS() if( $add_missing );
+	 
+	if( $add_missing == 1 ){
+		$self->add_missing_exons_from_CDS()	
+	}
+		
+	# If non-coding and it doesn't have an exon, then add one
+	if( $self->num_exons() == 0  && $self->num_CDSs() == 0 && $add_missing == 1  ){
+		$self->add_missing_exons_from_transcript();
+	}
 	
 	#$self->add_UTR_element_based_on_CDS_exon_difference();
 
@@ -266,6 +274,21 @@ sub add_missing_exons_from_CDS {
 	}
 }
 
+
+sub add_missing_exons_from_transcript {
+	my $self = shift;
+
+			
+
+			my $gene_id     = $self->get_parent()->get_id();
+			my $exon_id     = $gene_id . "-E";
+					
+
+			my $ref_exon = $self->add_exon( $exon_id, $self->get_start(), $self->get_end() );
+			
+			$self->get_parent()->get_file()->add_exon_to_index( $gene_id, $self, $self->get_parent() ); 
+			
+}
 
 
 #sub add_UTR_element_based_on_CDS_exon_difference {
