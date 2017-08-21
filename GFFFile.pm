@@ -46,7 +46,9 @@ my $individual_CDS_ids = 1;
 
 sub new {
 	my ($filename) = @_;
-	my $self = { filename => $filename };
+	my %chroms;
+	my $self = { filename => $filename,
+				 chroms => %chroms };
 	
 	bless $self, GFFFile;
 	
@@ -68,6 +70,12 @@ sub get_filename {
 	my $self = shift;
 	return $self->{filename};
 }
+
+sub get_chrom_names {
+	my $self = shift;
+	return keys (%{$self->{chroms}});
+}
+
 
 sub read {
 	my $self = shift;
@@ -115,6 +123,9 @@ sub read_genes {
 			$strand, $phase,       $id,    $parent,
 			$name,   $description, $attribRef
 			) = process_line($line);
+			
+			
+			$self->{chroms}{$chrom} = 1;
 			
 			my %attr = %{$attribRef};
 			
@@ -177,6 +188,7 @@ sub read_transcripts {
 			$name,   $description, $attribRef
 			) = process_line($line);
 			
+			$self->{chroms}{$chrom} = 1;			
 			my %attr = %{$attribRef};
 			
 			# Reference to the new feature
@@ -285,6 +297,7 @@ sub read_exons {
 			$name,   $description, $attribRef
 			) = process_line($line);
 			
+			$self->{chroms}{$chrom} = 1;			
 			my %attr = %{$attribRef};
 			
 			# Reference to the new feature
@@ -439,6 +452,7 @@ sub read_utrs {
 			$name,   $description, $attribRef
 			) = process_line($line);
 			
+			$self->{chroms}{$chrom} = 1;			
 			my %attr = %{$attribRef};
 			
 			# Reference to the new feature
@@ -532,6 +546,7 @@ sub read_cds {
 			$name,   $description, $attribRef
 			) = process_line($line);
 			
+			$self->{chroms}{$chrom} = 1;			
 			my %attr = %{$attribRef};
 			
 			# Reference to the new feature
