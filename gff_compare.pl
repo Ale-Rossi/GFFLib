@@ -29,7 +29,7 @@ my @gffGenesArray = ( values %{$gffAGenes}, values %{$gffBGenes} );
 GFFUtils::sort_gene_arrays( \@gffGenesArray, 0 );
 
 # This hash prevent a second comparison of genes that have identical
-# counterpar in the other file
+# counterpart in the other file
 my %identicals;
 
 # This check will keep track of genes that at least overlaps with other
