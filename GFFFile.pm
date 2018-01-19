@@ -55,6 +55,11 @@ sub new {
 	return $self;
 }
 
+sub get_header_comments{
+	my $self = shift;
+	return $self->{header_comments};	
+}
+
 sub add_exon_to_index {
 	my $self = shift;
 	
@@ -87,9 +92,7 @@ sub read {
 	# - exons from CDS (NOT IMPLEMENTED)
 	
 	my ( $discard_additional_attributes, $add_missing ) = @_;
-	
-	my $cmd = "cp " . $self->{filename} . "  " . $self->{filename} . ".temp";
-	
+		
 	print STDERR "Reading genes...\n";
 	$self->read_genes( $discard_additional_attributes, $add_missing );
 	print STDERR "Reading transcripts...\n";
@@ -110,13 +113,23 @@ sub read_genes {
 	my ( $discard_additional_attributes, $add_missing ) = @_;
 	
 	open GFFin, $self->{filename}
-	or croak "Impossible to open file " . $self->{filename} . " for read\n";
+	or croak "Unable to open file \'" . $self->{filename} . "\' for reading\n";
 	
 	# Reading only genes
+	my $still_on_header = 1;
 	while (<GFFin>) {
 		my $line = $_;
 		
+		if ( $line =~ /^\#\#FASTA/ ){
+			last;
+		} 
+		
+		if ( $line =~ /^\#/ && $still_on_header){
+			$self->{header_comments} .= $line; 
+			next;
+		}
 		next if ( $line =~ /^\#/ || $line =~ /^\s+$/ );
+		$still_on_header = 0;
 		
 		my (
 			$chrom,  $feature,     $start, $end,
@@ -179,6 +192,10 @@ sub read_transcripts {
 	or croak "Impossible to open file " . $self->{filename} . " for read\n";
 	while (<GFFin>) {
 		my $line = $_;
+		
+		if ( $line =~ /^\#\#FASTA/ ){
+			last;
+		} 
 		
 		next if ( $line =~ /^\#/ || $line =~ /^\s+$/ );
 		
@@ -287,6 +304,10 @@ sub read_exons {
 	or croak "Impossible to open file " . $self->{filename} . " for read\n";
 	while (<GFFin>) {
 		my $line = $_;
+		
+		if ( $line =~ /^\#\#FASTA/ ){
+			last;
+		} 		
 		
 		next if ( $line =~ /^\#/ || $line =~ /^\s+$/ );
 		
@@ -443,6 +464,11 @@ sub read_utrs {
 	while (<GFFin>) {
 		my $line = $_;
 		
+		if ( $line =~ /^\#\#FASTA/ ){
+			last;
+		} 
+		
+		
 		next if ( $line =~ /^\#/ || $line =~ /^\s+$/ );
 		
 		print STDERR "Processing line:\n\t$line\n" if $debug;
@@ -536,6 +562,10 @@ sub read_cds {
 	or croak "Impossible to open file " . $self->{filename} . " for read\n";
 	while (<GFFin>) {
 		my $line = $_;
+		
+		if ( $line =~ /^\#\#FASTA/ ){
+			last;
+		} 		
 		
 		next if ( $line =~ /^\#/ || $line =~ /^\s+$/ );
 		
@@ -866,7 +896,7 @@ sub process_line {
 		(
 			my (
 				$chrom, $void1,  $feature, $start, $end,
-				$void2, $strand, $phase,   $info
+				$void2, $strand, $phase, $info
 				)
 			= split "\t", $line
 			) == 9

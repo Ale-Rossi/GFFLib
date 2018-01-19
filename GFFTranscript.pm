@@ -823,7 +823,7 @@ sub delete_UTR_from_exon {
 			  if $tempUTR == 0;
 
 			# The concept of UTR in the context of GFF is different
-			# then the biological concecpt. The UTR is associated to an exon,
+			# then the biological concept. The UTR is associated to an exon,
 			# Example:
 			# | = coding
 			# : = UTR
