@@ -375,9 +375,9 @@ sub read_exons {
 							"Adding missing gene, transcript to orphan exon \'$id\'\n";
 							
 							#Generate a random gene id
-							my $gene_id = "tmp_gene_" . int( rand(10000) );
+							my $gene_id = "tmp_gene_" . int( rand(1000000) );
 							while ( defined $self->{genes}->{$gene_id} ) {
-								$gene_id = "tmp_gene_" . int( rand(10000) );
+								$gene_id = "tmp_gene_" . int( rand(1000000) );
 							}
 							
 							my $temp_gene_feature =
@@ -662,9 +662,9 @@ sub read_cds {
 						"Adding missing gene, transcript and exon based on orphan CDS \'$id\'\n";
 						
 						#Generate a random gene id
-						my $gene_id = "tmp_gene_" . int( rand(10000) );
+						my $gene_id = "tmp_gene_" . int( rand(1000000) );
 						while ( defined $self->{genes}->{$gene_id} ) {
-							$gene_id = "tmp_gene_" . int( rand(10000) );
+							$gene_id = "tmp_gene_" . int( rand(1000000) );
 						}
 						
 						#Generate a gene id based on CDS id
